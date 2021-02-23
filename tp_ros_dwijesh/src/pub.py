@@ -3,47 +3,62 @@
 import rospy
 from geometry_msgs.msg import PoseStamped
 import math
+from Tkinter import *
+from std_msgs.msg import Bool
+import time
 
-def talker():
-     pub = rospy.Publisher('chatter', PoseStamped, queue_size=10)
-     rospy.init_node('talker', anonymous=True)
-     rate = rospy.Rate(15) # 15hz
-     message = PoseStamped()
-     message.pose.position.x = 22
-     print(message)
-     while not rospy.is_shutdown():
-         #theta=rospy.get_time() 
+def callback(data):
+	print(data)
+	while(data.data == True):
+		if(data.data == False):
+			print("test")
+			break
+		print("workingqqqq")
+		pub = rospy.Publisher('chatter', PoseStamped, queue_size=10)
+		rate = rospy.Rate(15) # 15hz
+		message = PoseStamped()
+		message.pose.position.x = 22
+		print(message)
+		while not rospy.is_shutdown():
 
-         message.header.frame_id = "map"
-         r = 10	
-         theta = 0
+			message.header.frame_id = "map"
+			r = 10	
+			theta = 0
 
 
-         while theta < 2*(math.pi):
-	       message.pose.position.x = theta
-	       message.pose.position.y = math.sin(theta)
-               print(message)
-               #rospy.loginfo(hello_str)
-               pub.publish(message)
-               rate.sleep()
-               theta = theta + 0.1
+			while theta < 2*(math.pi):
+				message.pose.position.x = theta
+				message.pose.position.y = math.sin(theta)
+				print(message)
+			       #rospy.loginfo(hello_str)
+				pub.publish(message)
+				rate.sleep()
+				theta = theta + 0.1
 
-         while theta >=0:
-	       message.pose.position.x = theta
-	       message.pose.position.y = math.sin(-theta)
-               print(message)
-               #rospy.loginfo(hello_str)
-               pub.publish(message)
-               rate.sleep()
-               theta = theta - 0.1
-               print(message)
+			while theta >=0:
+				message.pose.position.x = theta
+				message.pose.position.y = math.sin(-theta)
+				print(message)
+			       #rospy.loginfo(hello_str)
+				pub.publish(message)
+				rate.sleep()
+				theta = theta - 0.1
+				print(message)
 
+	#else:  
+		#print("working222222")
+		#time.sleep(2)
+
+def listener():
+	rospy.init_node('sub', anonymous=True)
+	rospy.Subscriber("button_state", Bool, callback)
+
+	rospy.spin()
+
+
+if __name__ == '__main__':
+	listener()
 
 
          
-if __name__ == '__main__':
-     try:
-         talker()
-     except rospy.ROSInterruptException:
-         pass
 
