@@ -6,4 +6,7 @@
 		<remap from="button_state" to="chatter"/>
 	</node>
 
+	<node pkg="tp_ros_dwijesh" name="chatter" type="publisher.py" />
+	<node name="rviz" pkg="rviz" />
+
 </launch>
